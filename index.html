@@ -39,17 +39,16 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.6);
             position: absolute;
             z-index: 9999;
-            transition: 0.1s;
         }
 
         #evetBtn { background-color: #2ecc71; color: white; left: 30%; top: 55%; }
-        #hayirBtn { background-color: #e74c3c; color: white; right: 30%; top: 55%; }
+        #hayirBtn { background-color: #e74c3c; color: white; right: 30%; top: 55%; transition: 0.1s; }
     </style>
 </head>
 <body>
 
     <audio id="muzik" preload="auto">
-        <source src="sarki.mp3" type="audio/mpeg">
+        <source src="./sarki.mp3" type="audio/mpeg">
     </audio>
 
     <h1 id="txt">Ben Senden Hoşlanıyorum, <br>Benimle çıkar mısın? ❤️</h1>
@@ -58,12 +57,6 @@
     <button id="hayirBtn" onmouseover="kac()" onclick="kac()" class="btn">HAYIR</button>
 
     <script>
-        // Sayfa açılır açılmaz müziği arka planda hazırla
-        window.onload = function() {
-            const m = document.getElementById('muzik');
-            m.load();
-        };
-
         function kac() {
             const b = document.getElementById('hayirBtn');
             const x = Math.random() * (window.innerWidth - 150);
@@ -75,19 +68,25 @@
         function onayla() {
             const m = document.getElementById('muzik');
             
-            // Şarkıyı çalmaya zorla
-            m.play().then(() => {
-                console.log("Müzik başladı!");
-            }).catch(e => {
-                console.error("Hata:", e);
-                // Eğer sarki.mp3 bulunamazsa uyarı ver
-                alert("Şarkı dosyası bulunamadı! GitHub'da dosya adının tam olarak 'sarki.mp3' olduğundan emin ol.");
-            });
+            // Sesi %100 yap
+            m.volume = 1.0;
+            
+            // Oynatmayı dene
+            var playPromise = m.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    console.log("Müzik başarıyla başladı!");
+                }).catch(error => {
+                    // Eğer hata verirse sayfada bir yere dokunulmasını isteyip tekrar dener
+                    console.log("Otomatik oynatma engellendi, manuel tetikleniyor.");
+                    m.play();
+                });
+            }
 
             document.getElementById('txt').innerHTML = "Bende Seni Çok Seviyorum Yavrummm ❤️❤️❤️";
-            
-            document.getElementById('evetBtn').remove();
-            document.getElementById('hayirBtn').remove();
+            document.getElementById('evetBtn').style.display = 'none';
+            document.getElementById('hayirBtn').style.display = 'none';
         }
     </script>
 </body>
