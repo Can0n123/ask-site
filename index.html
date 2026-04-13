@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Aşk Bombası 💣💖</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  transition: 1s;
+}
+
+h1 {
+  color: white;
+  font-size: 40px;
+  margin-bottom: 40px;
+  transition: 0.5s;
+}
+
+.bigText {
+  font-size: 60px;
+  transform: scale(1.2);
+}
+
+.buttons {
+  display: flex;
+  gap: 20px;
+}
+
+button {
+  padding: 20px 50px;
+  font-size: 22px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#yesBtn {
+  background: #28a745;
+  color: white;
+}
+
+#yesBtn:hover {
+  transform: scale(1.1);
+}
+
+#noBtn {
+  position: absolute;
+  background: #dc3545;
+  color: white;
+}
+
+/* Kalpler */
+.heart {
+  position: absolute;
+  font-size: 20px;
+  animation: float 4s linear infinite;
+}
+
+@keyframes float {
+  from {
+    transform: translateY(100vh);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-10vh);
+    opacity: 0;
+  }
+}
+
+/* Patlama efekti */
+.boom {
+  position: absolute;
+  font-size: 30px;
+  animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+  to {
+    transform: translate(var(--x), var(--y)) scale(1.5);
+    opacity: 0;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<h1 id="text">Beni seviyor musun? 💖</h1>
+
+<div class="buttons" id="buttons">
+  <button id="yesBtn" onclick="yesClick()">Evet 💚</button>
+  <button id="noBtn">Hayır 😈</button>
+</div>
+
+<audio id="music" src="muzik.mp3"></audio>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+
+// Kaçan buton (smooth)
+noBtn.addEventListener("mouseover", () => {
+  const x = Math.random() * (window.innerWidth - 150);
+  const y = Math.random() * (window.innerHeight - 80);
+
+  noBtn.style.transition = "0.3s";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+});
+
+// EVET BASILINCA
+function yesClick() {
+  const text = document.getElementById("text");
+
+  text.innerText = "Ben de seni çok seviyorum yavrum 💖";
+  text.classList.add("bigText");
+
+  // Butonları kaldır
+  document.getElementById("buttons").style.display = "none";
+
+  // Arka plan efekti
+  document.body.style.background = "linear-gradient(135deg, #ff4b2b, #ff416c)";
+
+  // Müzik başlat (fade-in)
+  const music = document.getElementById("music");
+  music.volume = 0;
+  music.play();
+
+  let vol = 0;
+  const fade = setInterval(() => {
+    if (vol < 1) {
+      vol += 0.05;
+      music.volume = vol;
+    } else {
+      clearInterval(fade);
+    }
+  }, 200);
+
+  // Kalp patlaması 💥💖
+  for (let i = 0; i < 30; i++) {
+    const heart = document.createElement("div");
+    heart.innerText = "💖";
+    heart.classList.add("boom");
+
+    heart.style.left = "50%";
+    heart.style.top = "50%";
+
+    const x = (Math.random() - 0.5) * 500 + "px";
+    const y = (Math.random() - 0.5) * 500 + "px";
+
+    heart.style.setProperty('--x', x);
+    heart.style.setProperty('--y', y);
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 1000);
+  }
+}
+
+// Sürekli çıkan kalpler
+setInterval(() => {
+  const heart = document.createElement("div");
+  heart.innerText = "💕";
+  heart.classList.add("heart");
+
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+
+  document.body.appendChild(heart);
+
+  setTimeout(() => heart.remove(), 4000);
+}, 300);
+
+</script>
+
+</body>
+</html>
